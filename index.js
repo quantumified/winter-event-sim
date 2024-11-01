@@ -66,23 +66,43 @@ function simulateKeyFindingRunsWithCurrency(runs) {
             } else if (box === 'uncover') {
                 // Uncover two other boxes, deduct 7 currency
                 let uncovered = 0;
+                let revealedBoxes = [];
+
+                // Collect revealed boxes
                 while (uncovered < 2) {
                     let randomIndex = getRandomInt(BOARD_SIZE);
                     if (randomIndex !== boxIndex && board[randomIndex] !== null) {
+                        revealedBoxes.push(randomIndex);
                         uncovered++;
-                        if (board[randomIndex] === 'key') {
-                            // Key found through uncover, end the run
-                            moves++;
-                            currencySpent -= 7; // Deduct 7 for uncovering
-                            return { moves, currencySpent };
-                        } else if (board[randomIndex] === 'shuffle') {
-                            // Shuffle found through uncover, reset board and continue
-                            board = generateBoard();
-                            moves++;
-                            break;
-                        }
                     }
                 }
+
+                // First, check for special boxes and select them
+                for (let index of revealedBoxes) {
+                    if (board[index] === 'special') {
+                        currencySpent += 4; // Gain 4 currency for special box
+                        moves++;
+                        // If the special box is found, we stop checking further
+                        revealedBoxes = revealedBoxes.filter(i => i !== index); // Remove special box from further checks
+                        break; // Exit the loop since we found a special box
+                    }
+                }
+
+                // Now check the remaining boxes for key or shuffle
+                for (let index of revealedBoxes) {
+                    if (board[index] === 'key') {
+                        // Key found through uncover, end the run
+                        moves++;
+                        currencySpent -= 7; // Deduct 7 for uncovering
+                        return { moves, currencySpent };
+                    } else if (board[index] === 'shuffle') {
+                        // Shuffle found through uncover, reset board and continue
+                        board = generateBoard();
+                        moves++;
+                        break;
+                    }
+                }
+
                 moves++;
                 currencySpent -= 7; // Deduct 7 for uncovering
             } else if (box === 'special') {
