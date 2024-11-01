@@ -88,7 +88,7 @@ def simulate_board_with_currency(trials):
     return average_boxes_opened, average_bells_spent
 
 # Simulate over a large number of trials
-trials = 10000
+trials = 100000
 average_boxes_opened, average_bells_spent = simulate_board_with_currency(trials)
 print(f"Average number of boxes opened to find a key: {average_boxes_opened:.2f}")
 print(f"Average number of bells spent to find a key: {average_bells_spent:.2f}")
