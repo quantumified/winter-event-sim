@@ -1,3 +1,4 @@
+// Simulate winter event 2024 (probably can be modified for any other board/boxes game in FoE easily)
 function simulateKeyFindingRunsWithCurrency(runs) {
     const BOARD_SIZE = 14;
     let totalMoves = 0;
